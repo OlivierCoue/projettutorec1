@@ -37,7 +37,6 @@ void IMPLEMENT(encrypt)(const char * key, char * str) {
 }
 void IMPLEMENT(decrypt)(const char * key, char * str) {
     int i=0, j=0;
-
     while(str[i]!='\0'){
         if(toLowerChar(str[i])>='a' && toLowerChar(str[i])<='z'){
             str[i]=decode(toLowerChar(key[j]), toLowerChar(str[i]));

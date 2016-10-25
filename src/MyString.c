@@ -75,7 +75,20 @@ int IMPLEMENT(compareString)(const char * str1, const char * str2) {
  * than str2
  */
 int IMPLEMENT(icaseCompareString)(const char * str1, const char * str2) {
-    return provided_icaseCompareString(str1, str2);
+    /*return provided_icaseCompareString(str1, str2);*/
+    int i;
+    int str1Size = (int) stringLength(str1);
+    int str2Size = (int) stringLength(str2);
+    int size = (str1Size > str2Size) ? str1Size : str2Size;
+
+    for(i=0; i<size; i++){
+        if(toLowerChar(str1[i]) > toLowerChar(str2[i]))
+            return 1;
+        if(toLowerChar(str1[i]) < toLowerChar(str2[i]))
+            return -1;
+    }
+
+    return 0;
 }
 
 /** Like the strlen() function. It calculates the length of the string str, not including the terminating '\\0' character.
@@ -129,7 +142,7 @@ char * IMPLEMENT(duplicateString)(const char * str) {
 
     dest = (char *)malloc((stringLength(str)+1)*sizeof(char));
     if(dest == NULL)
-        exit(-1);
+        fatalError("Allocation error");
 
     copyStringWithLength(dest, str, (size_t)stringLength(str)+1);
     return dest;
