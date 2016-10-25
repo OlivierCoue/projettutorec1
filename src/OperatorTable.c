@@ -19,6 +19,7 @@
 
 #include <OperatorTable.h>
 #include <EncryptDecrypt.h>
+#include <MyString.h>
 
 /**
  * Create an empty table of operators.
@@ -26,7 +27,14 @@
  * @relates OperatorTable
  */
 OperatorTable * IMPLEMENT(OperatorTable_create)(void) {
-    return provided_OperatorTable_create();
+    /*return provided_OperatorTable_create();*/
+    OperatorTable *newOpTable;
+    newOpTable = (OperatorTable *) malloc(sizeof(OperatorTable));
+    if(newOpTable==NULL)
+        fatalError("Allocation error");
+    newOpTable->recordCount = 0;
+    newOpTable->records = NULL;
+    return newOpTable;
 }
 
 /** Free a table of operators.
@@ -34,7 +42,15 @@ OperatorTable * IMPLEMENT(OperatorTable_create)(void) {
  * @relates OperatorTable
  */
 void IMPLEMENT(OperatorTable_destroy)(OperatorTable * table) {
-    provided_OperatorTable_destroy(table);
+    /*provided_OperatorTable_destroy(table);*/
+    int i;
+    for(i=0;i<table->recordCount;i++){
+        free(table->records[i][0]);
+        free(table->records[i][1]);
+        free(table->records[i]);
+    }
+    free(table->records);
+    free(table);
 }
 
 /** Load a table of operators from a file.
@@ -61,7 +77,8 @@ void IMPLEMENT(OperatorTable_saveToFile)(OperatorTable * table, const char * fil
  * @relates OperatorTable
  */
 int IMPLEMENT(OperatorTable_getRecordCount)(OperatorTable * table) {
-    return provided_OperatorTable_getRecordCount(table);
+    /*return provided_OperatorTable_getRecordCount(table);*/
+    return table->recordCount;
 }
 
 /** Get the name of a record of a table of operators.
@@ -71,7 +88,10 @@ int IMPLEMENT(OperatorTable_getRecordCount)(OperatorTable * table) {
  * @relates OperatorTable
  */
 const char * IMPLEMENT(OperatorTable_getName)(OperatorTable * table, int recordIndex) {
-    return provided_OperatorTable_getName(table, recordIndex);
+    /*return provided_OperatorTable_getName(table, recordIndex);*/
+    if(recordIndex>=table->recordCount)
+        fatalError("Record index out of array");
+    return table->records[recordIndex][0];
 }
 
 /** Get the password of a record of a table of operators.
@@ -91,7 +111,13 @@ const char * IMPLEMENT(OperatorTable_getPassword)(OperatorTable * table, int rec
  * @relates OperatorTable
  */
 int IMPLEMENT(OperatorTable_findOperator)(OperatorTable * table, const char * name) {
-    return provided_OperatorTable_findOperator(table, name);
+    /*return provided_OperatorTable_findOperator(table, name);*/
+    int i;
+    for(i=0;i<table->recordCount;i++){
+        if(icaseCompareString(table->records[i][0], name)==0)
+            return i;
+    }
+    return -1;
 }
 
 /** Define or change the password of an operator
@@ -102,7 +128,26 @@ int IMPLEMENT(OperatorTable_findOperator)(OperatorTable * table, const char * na
  * @relates OperatorTable
  */
 int IMPLEMENT(OperatorTable_setOperator)(OperatorTable * table, const char * name, const char * password) {
-    return provided_OperatorTable_setOperator(table, name, password);
+    /*return provided_OperatorTable_setOperator(table, name, password);*/
+    int operatorPosition = OperatorTable_findOperator(table, name);
+    if(operatorPosition!=-1){
+        free(table->records[operatorPosition][1]);
+        table->records[operatorPosition][1] = duplicateString(password);
+        return operatorPosition;
+    }
+
+    table->recordCount++;
+    table->records = (char***) realloc(table->records, (long unsigned int)(table->recordCount)*sizeof(char**));
+    if(table->records==NULL)
+        fatalError("Allocation error");
+
+    table->records[table->recordCount-1] = (char**) malloc(2*sizeof(char*));
+    if(table->records[table->recordCount-1]==NULL)
+        fatalError("Allocation error");
+
+    table->records[table->recordCount-1][0] = duplicateString(name);
+    table->records[table->recordCount-1][1] = duplicateString(password);
+    return table->recordCount-1;
 }
 
 /** Remove an operator from the table.
@@ -111,6 +156,12 @@ int IMPLEMENT(OperatorTable_setOperator)(OperatorTable * table, const char * nam
  * @relates OperatorTable
  */
 void IMPLEMENT(OperatorTable_removeRecord)(OperatorTable * table, int recordIndex) {
-    provided_OperatorTable_removeRecord(table, recordIndex);
+    /*provided_OperatorTable_removeRecord(table, recordIndex);*/
+    int i;
+    for(i=recordIndex;i<table->recordCount-1;i++){
+        table->records[i][0] = table->records[i+1][0];
+        table->records[i][1] = table->records[i+1][1];
+    }
+    table->recordCount--;
 }
 
