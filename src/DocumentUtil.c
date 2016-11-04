@@ -26,7 +26,28 @@
  * @warning the user is responsible for freeing the memory allocated for the new string
  */
 char * IMPLEMENT(computeDocumentNumber)(long id) {
-    return provided_computeDocumentNumber(id);
+    /*return provided_computeDocumentNumber(id);*/
+   char buf[8];
+   char* pt = buf;
+   int i;
+   size_t nb;
+   char tmp;
+   do
+   {
+      if(id%36<10)
+        *pt++ = (char)(id%36+'0');
+      else
+        *pt++ = (char)(id%36+'A'-10);
+   }while( id/=36 );
+   *pt = '\0';
+   nb=stringLength(buf);
+   for(i=0;i<(int)nb/2;i++)
+   {
+       tmp = buf[i];
+       buf[i] = buf[(int)nb-i-1];
+       buf[(int)nb-i-1] = tmp;
+   }
+   return duplicateString(buf);
 }
 
 /** Create a new string on the heap which represents the date in the format DD/MM/YYYY.
@@ -38,7 +59,13 @@ char * IMPLEMENT(computeDocumentNumber)(long id) {
  * @warning the user is responsible for freeing the memory allocated for the new string
  */
 char * IMPLEMENT(formatDate)(int day, int month, int year) {
-    return provided_formatDate(day, month, year);
+    /*return provided_formatDate(day, month, year);*/
+    char *res;
+    res = (char*)malloc(20*sizeof(char));
+    if(res==NULL)
+        fatalError("Allocation error");
+    sprintf(res,"%02i/%02i/%02i",day,month,year);
+    return res;
 }
 
 

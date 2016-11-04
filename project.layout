@@ -1,19 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="debug" />
-	<File name="src/EncryptDecrypt.c" open="1" top="0" tabpos="2">
-		<Cursor position="1293" topLine="6" />
+	<File name="include/Config.h" open="0" top="0" tabpos="8">
+		<Cursor position="0" topLine="96" />
 	</File>
-	<File name="src/EncryptDecryptUnit.c" open="1" top="0" tabpos="5">
+	<File name="include/CustomerDB.h" open="0" top="0" tabpos="9">
+		<Cursor position="0" topLine="3" />
+	</File>
+	<File name="include/EncryptDecrypt.h" open="0" top="0" tabpos="0">
+		<Cursor position="1287" topLine="3" />
+	</File>
+	<File name="include/MyString.h" open="0" top="0" tabpos="7">
+		<Cursor position="2339" topLine="36" />
+	</File>
+	<File name="src/EncryptDecrypt.c" open="0" top="0" tabpos="2">
+		<Cursor position="1367" topLine="11" />
+	</File>
+	<File name="src/EncryptDecryptUnit.c" open="0" top="0" tabpos="5">
 		<Cursor position="0" topLine="0" />
 	</File>
-	<File name="src/MyString.c" open="1" top="1" tabpos="3">
-		<Cursor position="2975" topLine="54" />
+	<File name="src/MyString.c" open="0" top="0" tabpos="3">
+		<Cursor position="5342" topLine="243" />
 	</File>
-	<File name="src/MyStringUnit.c" open="1" top="0" tabpos="4">
+	<File name="src/MyStringUnit.c" open="0" top="0" tabpos="4">
 		<Cursor position="3373" topLine="108" />
 	</File>
-	<File name="src/main.c" open="1" top="0" tabpos="1">
+	<File name="src/OperatorTable.c" open="1" top="1" tabpos="1">
+		<Cursor position="2883" topLine="51" />
+	</File>
+	<File name="src/OperatorTableUnit.c" open="1" top="0" tabpos="2">
+		<Cursor position="6076" topLine="141" />
+	</File>
+	<File name="src/main.c" open="0" top="0" tabpos="1">
 		<Cursor position="0" topLine="0" />
 	</File>
 </CodeBlocks_layout_file>

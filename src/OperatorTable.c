@@ -60,6 +60,20 @@ void IMPLEMENT(OperatorTable_destroy)(OperatorTable * table) {
  */
 OperatorTable * IMPLEMENT(OperatorTable_loadFromFile)(const char * filename) {
     return provided_OperatorTable_loadFromFile(filename);
+    /*OperatorTable *newOperatorTable = OperatorTable_create();
+    FILE* file = fopen(filename, "r");
+    char *name = (char*) malloc(OPERATORTABLE_MAXNAMESIZE*sizeof(char));
+    char *password = (char*) malloc(OPERATORTABLE_MAXNAMESIZE*sizeof(char));
+    printf("\n\n");
+    while (fgets(name, sizeof(name), file) && fgets(password, sizeof(password), file)) {
+        decrypt("PERDU", name);
+        decrypt("PERDU", password);
+        printf("name: %s\npassword: %s\n\n", name, password);
+        OperatorTable_setOperator(newOperatorTable, name, password);
+    }
+    fclose(file);
+    printf("\n\nsize: %d", OperatorTable_getRecordCount(newOperatorTable));
+    return newOperatorTable;*/
 }
 
 /** Save a table of operators to a file.
@@ -69,6 +83,22 @@ OperatorTable * IMPLEMENT(OperatorTable_loadFromFile)(const char * filename) {
  */
 void IMPLEMENT(OperatorTable_saveToFile)(OperatorTable * table, const char * filename) {
     provided_OperatorTable_saveToFile(table, filename);
+    /*int i;
+    char *tmpUsername, *tmpPassword;
+    FILE * fp;
+    fp = fopen(filename, "w+");
+    for(i=0; i<OperatorTable_getRecordCount(table);i++){
+        tmpUsername = duplicateString(OperatorTable_getName(table, i));
+        tmpPassword = duplicateString(OperatorTable_getPassword(table, i));
+        encrypt("PERDU", tmpUsername);
+        encrypt("PERDU", tmpPassword);
+        fprintf(fp, "%s\n", tmpUsername);
+        fprintf(fp, "%s\n", tmpPassword);
+        free(tmpUsername);
+        free(tmpPassword);
+
+    }
+    fclose(fp);*/
 }
 
 /** Get the number of records of a table of operators
