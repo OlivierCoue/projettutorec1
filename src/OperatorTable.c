@@ -189,8 +189,11 @@ void IMPLEMENT(OperatorTable_removeRecord)(OperatorTable * table, int recordInde
     /*provided_OperatorTable_removeRecord(table, recordIndex);*/
     int i;
     for(i=recordIndex;i<table->recordCount-1;i++){
-        table->records[i][0] = table->records[i+1][0];
-        table->records[i][1] = table->records[i+1][1];
+        table->records[i][0] = duplicateString(table->records[i+1][0]);
+        table->records[i][1] = duplicateString(table->records[i+1][1]);
+        free(table->records[i+1][0]);
+        free(table->records[i+1][1]);
+
     }
     table->recordCount--;
 }

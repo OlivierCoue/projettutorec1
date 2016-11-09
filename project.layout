@@ -13,6 +13,15 @@
 	<File name="include/MyString.h" open="0" top="0" tabpos="7">
 		<Cursor position="2339" topLine="36" />
 	</File>
+	<File name="src/CustomerDB.c" open="1" top="1" tabpos="3">
+		<Cursor position="3061" topLine="59" />
+	</File>
+	<File name="src/CustomerRecord.c" open="1" top="0" tabpos="1">
+		<Cursor position="2631" topLine="59" />
+	</File>
+	<File name="src/DocumentUtil.c" open="1" top="0" tabpos="2">
+		<Cursor position="2200" topLine="36" />
+	</File>
 	<File name="src/EncryptDecrypt.c" open="0" top="0" tabpos="2">
 		<Cursor position="1367" topLine="11" />
 	</File>
@@ -25,10 +34,10 @@
 	<File name="src/MyStringUnit.c" open="0" top="0" tabpos="4">
 		<Cursor position="3373" topLine="108" />
 	</File>
-	<File name="src/OperatorTable.c" open="1" top="1" tabpos="1">
-		<Cursor position="2883" topLine="51" />
+	<File name="src/OperatorTable.c" open="0" top="0" tabpos="1">
+		<Cursor position="1992" topLine="51" />
 	</File>
-	<File name="src/OperatorTableUnit.c" open="1" top="0" tabpos="2">
+	<File name="src/OperatorTableUnit.c" open="0" top="0" tabpos="2">
 		<Cursor position="6076" topLine="141" />
 	</File>
 	<File name="src/main.c" open="0" top="0" tabpos="1">

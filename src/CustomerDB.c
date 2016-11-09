@@ -24,19 +24,53 @@
 const char * CUSTOMERDB_FILENAME = BASEPATH "/data/Customer.db";
 
 CustomerDB * IMPLEMENT(CustomerDB_create)(const char * filename) {
-    return provided_CustomerDB_create(filename);
+    /*return provided_CustomerDB_create(filename);*/
+    CustomerDB *newCustomerDB;
+
+    newCustomerDB = (CustomerDB*) malloc(sizeof(CustomerDB));
+    if(newCustomerDB==NULL)
+        exit(-1);
+
+    newCustomerDB->file = fopen(filename, "wb+");
+    if(newCustomerDB->file==NULL)
+        return NULL;
+
+    newCustomerDB->recordCount=0;
+    return newCustomerDB;
 }
 
 CustomerDB * IMPLEMENT(CustomerDB_open)(const char * filename) {
-    return provided_CustomerDB_open(filename);
+    /*return provided_CustomerDB_open(filename);*/
+    CustomerDB *openedCustomerDB;
+
+    openedCustomerDB = (CustomerDB*) malloc(sizeof(CustomerDB));
+    if(openedCustomerDB==NULL)
+        exit(-1);
+
+    openedCustomerDB->file = fopen(filename, "rb+");
+    if(openedCustomerDB->file==NULL)
+        return NULL;
+
+    fread(&openedCustomerDB->recordCount, sizeof(int), 1, openedCustomerDB->file);
+    return openedCustomerDB;
 }
 
 CustomerDB * IMPLEMENT(CustomerDB_openOrCreate)(const char * filename) {
-    return provided_CustomerDB_openOrCreate(filename);
+    /*return provided_CustomerDB_openOrCreate(filename);*/
+    CustomerDB *customerDB;
+    customerDB = CustomerDB_open(filename);
+    if(customerDB==NULL){
+        customerDB = CustomerDB_create(filename);
+    }
+    return customerDB;
 }
 
 void IMPLEMENT(CustomerDB_close)(CustomerDB * customerDB) {
-    provided_CustomerDB_close(customerDB);
+    /*provided_CustomerDB_close(customerDB);*/
+    fseek(customerDB->file, 0, SEEK_SET );
+    fwrite(&customerDB->recordCount, sizeof(int), 1,customerDB->file);
+    fclose(customerDB->file);
+    free(customerDB);
 }
 
 int IMPLEMENT(CustomerDB_getRecordCount)(CustomerDB * customerDB) {

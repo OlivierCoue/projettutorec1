@@ -125,9 +125,10 @@ void IMPLEMENT(copyString)(char * dest, const char * src) {
  * @param destSize the maximal number of characters to copy
  */
 void IMPLEMENT(copyStringWithLength)(char * dest, const char * src, size_t destSize) {
-    int i;
-    for(i=0; i<(int)destSize-1; i++){
+    size_t i = 0;
+    while(i<destSize-1 && src[i] != '\0'){
         dest[i] = src[i];
+        i++;
     }
     dest[i] = '\0';
 }
@@ -138,8 +139,8 @@ void IMPLEMENT(copyStringWithLength)(char * dest, const char * src, size_t destS
  * @param str the string to duplicate
  */
 char * IMPLEMENT(duplicateString)(const char * str) {
+    /*return provided_duplicateString(str);*/
     char * dest;
-
     dest = (char *)malloc((stringLength(str)+1)*sizeof(char));
     if(dest == NULL)
         fatalError("Allocation error");
