@@ -29,7 +29,7 @@ CustomerDB * IMPLEMENT(CustomerDB_create)(const char * filename) {
 
     newCustomerDB = (CustomerDB*) malloc(sizeof(CustomerDB));
     if(newCustomerDB==NULL)
-        exit(-1);
+        fatalError("Allocation Error");
 
     newCustomerDB->file = fopen(filename, "wb+");
     if(newCustomerDB->file==NULL)
@@ -45,11 +45,13 @@ CustomerDB * IMPLEMENT(CustomerDB_open)(const char * filename) {
 
     openedCustomerDB = (CustomerDB*) malloc(sizeof(CustomerDB));
     if(openedCustomerDB==NULL)
-        exit(-1);
+        fatalError("Allocation Error");
 
     openedCustomerDB->file = fopen(filename, "rb+");
-    if(openedCustomerDB->file==NULL)
+    if(openedCustomerDB->file==NULL){
+        free(openedCustomerDB);
         return NULL;
+    }
 
     fread(&openedCustomerDB->recordCount, sizeof(int), 1, openedCustomerDB->file);
     return openedCustomerDB;

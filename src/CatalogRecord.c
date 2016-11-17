@@ -25,7 +25,21 @@
  */
 int IMPLEMENT(CatalogRecord_isValueValid_code)(const char * value)
 {
-  return provided_CatalogRecord_isValueValid_code(value);
+  /*return provided_CatalogRecord_isValueValid_code(value);*/
+  int isValid = 0;
+  int i = 0;
+    while(value[i]!='\0'){
+      isValid=0;
+      if(toLowerChar(value[i])>='a'&&toLowerChar(value[i])<='z')
+        isValid=1;
+      if(value[i]>='0'&&value[i]<='9')
+        isValid=1;
+      if(!isValid)
+        return 0;
+    i++;
+  }
+  return 1;
+
 }
 
 /** Static function which test if the value is a positive number
@@ -34,7 +48,13 @@ int IMPLEMENT(CatalogRecord_isValueValid_code)(const char * value)
  */
 int IMPLEMENT(CatalogRecord_isValueValid_positiveNumber)(const char * value)
 {
-  return provided_CatalogRecord_isValueValid_positiveNumber(value);
+  /*return provided_CatalogRecord_isValueValid_positiveNumber(value);*/
+  double n=0;
+  char *stopstring;
+  n = strtod(value, &stopstring);
+  if(n>0 && stringLength(stopstring)==0)
+    return 1;
+  return 0;
 }
 
 /** Static function to set the code field from a string
@@ -43,7 +63,9 @@ int IMPLEMENT(CatalogRecord_isValueValid_positiveNumber)(const char * value)
  */
 void IMPLEMENT(CatalogRecord_setValue_code)(CatalogRecord * record, const char * value)
 {
-  provided_CatalogRecord_setValue_code(record, value);
+  /*provided_CatalogRecord_setValue_code(record, value);*/
+  free(record->code);
+  record->code = duplicateString(value);
 }
 
 /** Static function to set the designation field from a string
@@ -52,7 +74,9 @@ void IMPLEMENT(CatalogRecord_setValue_code)(CatalogRecord * record, const char *
  */
 void IMPLEMENT(CatalogRecord_setValue_designation)(CatalogRecord * record, const char * value)
 {
-  provided_CatalogRecord_setValue_designation(record, value);
+  /*provided_CatalogRecord_setValue_designation(record, value);*/
+  free(record->designation);
+  record->designation = duplicateString(value);
 }
 
 /** Static function to set the unity field from a string
@@ -61,7 +85,9 @@ void IMPLEMENT(CatalogRecord_setValue_designation)(CatalogRecord * record, const
  */
 void IMPLEMENT(CatalogRecord_setValue_unity)(CatalogRecord * record, const char * value)
 {
-  provided_CatalogRecord_setValue_unity(record, value);
+  /*provided_CatalogRecord_setValue_unity(record, value);*/
+  free(record->unity);
+  record->unity = duplicateString(value);
 }
 
 /** Static function to set the basePrice field from a string
@@ -70,7 +96,10 @@ void IMPLEMENT(CatalogRecord_setValue_unity)(CatalogRecord * record, const char 
  */
 void IMPLEMENT(CatalogRecord_setValue_basePrice)(CatalogRecord * record, const char * value)
 {
-  provided_CatalogRecord_setValue_basePrice(record, value);
+  /*provided_CatalogRecord_setValue_basePrice(record, value);*/
+  char *stopstring;
+  double d = strtod(value, &stopstring);
+  record->basePrice = d;
 }
 
 /** Static function to set the sellingPrice field from a string
@@ -79,7 +108,10 @@ void IMPLEMENT(CatalogRecord_setValue_basePrice)(CatalogRecord * record, const c
  */
 void IMPLEMENT(CatalogRecord_setValue_sellingPrice)(CatalogRecord * record, const char * value)
 {
-  provided_CatalogRecord_setValue_sellingPrice(record, value);
+  /*provided_CatalogRecord_setValue_sellingPrice(record, value);*/
+  char *stopstring;
+  double d = strtod(value, &stopstring);
+  record->sellingPrice = d;
 }
 
 /** Static function to set the rateOfVAT field from a string
@@ -88,7 +120,10 @@ void IMPLEMENT(CatalogRecord_setValue_sellingPrice)(CatalogRecord * record, cons
  */
 void IMPLEMENT(CatalogRecord_setValue_rateOfVAT)(CatalogRecord * record, const char * value)
 {
-  provided_CatalogRecord_setValue_rateOfVAT(record, value);
+  /*provided_CatalogRecord_setValue_rateOfVAT(record, value);*/
+  char *stopstring;
+  double d = strtod(value, &stopstring);
+  record->rateOfVAT = d;
 }
 
 /** Static function which create a copy string on the head of the code field value
@@ -99,7 +134,8 @@ void IMPLEMENT(CatalogRecord_setValue_rateOfVAT)(CatalogRecord * record, const c
  */
 char * IMPLEMENT(CatalogRecord_getValue_code)(CatalogRecord * record)
 {
-  return provided_CatalogRecord_getValue_code(record);
+  /*return provided_CatalogRecord_getValue_code(record);*/
+  return duplicateString(record->code);
 }
 
 /** Static function which create a copy string on the head of the designation field value
@@ -110,7 +146,8 @@ char * IMPLEMENT(CatalogRecord_getValue_code)(CatalogRecord * record)
  */
 char * IMPLEMENT(CatalogRecord_getValue_designation)(CatalogRecord * record)
 {
-  return provided_CatalogRecord_getValue_designation(record);
+  /*return provided_CatalogRecord_getValue_designation(record);*/
+  return duplicateString(record->designation);
 }
 
 /** Static function which create a copy string on the head of the unity field value
@@ -121,7 +158,8 @@ char * IMPLEMENT(CatalogRecord_getValue_designation)(CatalogRecord * record)
  */
 char * IMPLEMENT(CatalogRecord_getValue_unity)(CatalogRecord * record)
 {
-  return provided_CatalogRecord_getValue_unity(record);
+  /*return provided_CatalogRecord_getValue_unity(record);*/
+  return duplicateString(record->unity);
 }
 
 /** Static function which create a copy string on the head of the basePrice field value
@@ -132,7 +170,12 @@ char * IMPLEMENT(CatalogRecord_getValue_unity)(CatalogRecord * record)
  */
 char * IMPLEMENT(CatalogRecord_getValue_basePrice)(CatalogRecord * record)
 {
-  return provided_CatalogRecord_getValue_basePrice(record);
+  /*return provided_CatalogRecord_getValue_basePrice(record);*/
+  char *s = (char *) malloc(CATALOGRECORD_BASEPRICE_SIZE);
+  if(s==NULL)
+    fatalError("Allocation Error");
+  sprintf(s, "%.2f", record->basePrice);
+  return s;
 }
 
 /** Static function which create a copy string on the head of the sellingPrice field value
@@ -143,7 +186,12 @@ char * IMPLEMENT(CatalogRecord_getValue_basePrice)(CatalogRecord * record)
  */
 char * IMPLEMENT(CatalogRecord_getValue_sellingPrice)(CatalogRecord * record)
 {
-  return provided_CatalogRecord_getValue_sellingPrice(record);
+  /*return provided_CatalogRecord_getValue_sellingPrice(record);*/
+  char *s = (char *) malloc(CATALOGRECORD_SELLINGPRICE_SIZE);
+  if(s==NULL)
+    fatalError("Allocation Error");
+  sprintf(s, "%.2f", record->sellingPrice);
+  return s;
 }
 
 /** Static function which create a copy string on the head of the rateOfVAT field value
@@ -154,7 +202,12 @@ char * IMPLEMENT(CatalogRecord_getValue_sellingPrice)(CatalogRecord * record)
  */
 char * IMPLEMENT(CatalogRecord_getValue_rateOfVAT)(CatalogRecord * record)
 {
-  return provided_CatalogRecord_getValue_rateOfVAT(record);
+  /*return provided_CatalogRecord_getValue_rateOfVAT(record);*/
+  char *s = (char *) malloc(CATALOGRECORD_RATEOFVAT_SIZE);
+  if(s==NULL)
+    fatalError("Allocation Error");
+  sprintf(s, "%.2f", record->rateOfVAT);
+  return s;
 }
 
 /** Initialize a record
@@ -163,7 +216,13 @@ char * IMPLEMENT(CatalogRecord_getValue_rateOfVAT)(CatalogRecord * record)
  */
 void IMPLEMENT(CatalogRecord_init)(CatalogRecord * record)
 {
-  provided_CatalogRecord_init(record);
+  /*provided_CatalogRecord_init(record);*/
+  record->basePrice = 0;
+  record->sellingPrice = 0;
+  record->rateOfVAT = 0;
+  record->code = duplicateString("");
+  record->designation = duplicateString("");
+  record->unity = duplicateString("");
 }
 
 /** Finalize a record.
@@ -171,7 +230,13 @@ void IMPLEMENT(CatalogRecord_init)(CatalogRecord * record)
  */
 void IMPLEMENT(CatalogRecord_finalize)(CatalogRecord * record)
 {
-  provided_CatalogRecord_finalize(record);
+  /*provided_CatalogRecord_finalize(record);*/
+  if(record->code!=NULL)
+    free(record->code);
+  if(record->designation!=NULL)
+    free(record->designation);
+  if(record->unity!=NULL)
+    free(record->unity);
 }
 
 /** Read a record from a file
@@ -180,7 +245,23 @@ void IMPLEMENT(CatalogRecord_finalize)(CatalogRecord * record)
  */
 void IMPLEMENT(CatalogRecord_read)(CatalogRecord * record, FILE * file)
 {
-  provided_CatalogRecord_read(record, file);
+  /*provided_CatalogRecord_read(record, file);*/
+  char codeTab[CATALOGRECORD_CODE_SIZE];
+  char designationTab[CATALOGRECORD_DESIGNATION_SIZE];
+  char unityTab[CATALOGRECORD_UNITY_SIZE];
+
+
+  if(fread(codeTab, sizeof(char)*CATALOGRECORD_CODE_SIZE, 1, file)!=1)
+    fatalError("Writing Error");
+  fread(designationTab, sizeof(char)*CATALOGRECORD_DESIGNATION_SIZE, 1, file);
+  fread(unityTab, sizeof(char)*CATALOGRECORD_UNITY_SIZE, 1, file);
+  fread(&record->basePrice, sizeof(double), 1, file);
+  fread(&record->sellingPrice, sizeof(double), 1, file);
+  fread(&record->rateOfVAT, sizeof(double), 1, file);
+
+  CatalogRecord_setValue_code(record, codeTab);
+  CatalogRecord_setValue_designation(record, designationTab);
+  CatalogRecord_setValue_unity(record, unityTab);
 }
 
 /** Write a record to a file
@@ -190,5 +271,37 @@ void IMPLEMENT(CatalogRecord_read)(CatalogRecord * record, FILE * file)
 void IMPLEMENT(CatalogRecord_write)(CatalogRecord * record, FILE * file)
 {
   provided_CatalogRecord_write(record, file);
+  /*char codeTab[CATALOGRECORD_CODE_SIZE] = {0};
+  char designationTab[CATALOGRECORD_DESIGNATION_SIZE] = {0};
+  char unityTab[CATALOGRECORD_UNITY_SIZE] = {0};
+
+  copyStringWithLength(codeTab, record->code, CATALOGRECORD_CODE_SIZE);
+  copyStringWithLength(designationTab, record->designation, CATALOGRECORD_DESIGNATION_SIZE);
+  copyStringWithLength(unityTab, record->unity, CATALOGRECORD_UNITY_SIZE);
+
+  if(fwrite(codeTab, CATALOGRECORD_CODE_SIZE*sizeof(char), 1, file)!=1){
+    fclose(file);
+    exit(-1);
+  }
+  if(fwrite(designationTab, CATALOGRECORD_DESIGNATION_SIZE*sizeof(char), 1, file)!=1){
+    fclose(file);
+    exit(-1);
+  }
+  if(fwrite(unityTab, sizeof(char)*CATALOGRECORD_UNITY_SIZE, 1, file)!=1){
+    fclose(file);
+    exit(-1);
+  }
+  if(fwrite(CatalogRecord_getValue_basePrice(record), sizeof(char)*CATALOGRECORD_BASEPRICE_SIZE, 1, file)!=1){
+    fclose(file);
+    exit(-1);
+  }
+  if(fwrite(CatalogRecord_getValue_sellingPrice(record), sizeof(char)*CATALOGRECORD_SELLINGPRICE_SIZE, 1, file)!=1){
+    fclose(file);
+    exit(-1);
+  }
+  if(fwrite(CatalogRecord_getValue_rateOfVAT(record), sizeof(char)*CATALOGRECORD_RATEOFVAT_SIZE, 1, file)!=1){
+    fclose(file);
+    exit(-1);
+  }*/
 }
 

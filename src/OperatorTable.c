@@ -66,9 +66,9 @@ OperatorTable * IMPLEMENT(OperatorTable_loadFromFile)(const char * filename) {
     char *password = (char*) malloc(OPERATORTABLE_MAXNAMESIZE*sizeof(char));
     printf("\n\n");
     while (fgets(name, sizeof(name), file) && fgets(password, sizeof(password), file)) {
-        decrypt("PERDU", name);
-        decrypt("PERDU", password);
-        printf("name: %s\npassword: %s\n\n", name, password);
+        decrypt(OperatorCryptKey, name);
+        decrypt(OperatorCryptKey, password);
+        printf("name: %s\npasswodrd: %s\n\n", name, password);
         OperatorTable_setOperator(newOperatorTable, name, password);
     }
     fclose(file);
@@ -90,8 +90,8 @@ void IMPLEMENT(OperatorTable_saveToFile)(OperatorTable * table, const char * fil
     for(i=0; i<OperatorTable_getRecordCount(table);i++){
         tmpUsername = duplicateString(OperatorTable_getName(table, i));
         tmpPassword = duplicateString(OperatorTable_getPassword(table, i));
-        encrypt("PERDU", tmpUsername);
-        encrypt("PERDU", tmpPassword);
+        encrypt(OperatorCryptKey, tmpUsername);
+        encrypt(OperatorCryptKey, tmpPassword);
         fprintf(fp, "%s\n", tmpUsername);
         fprintf(fp, "%s\n", tmpPassword);
         free(tmpUsername);
@@ -188,13 +188,15 @@ int IMPLEMENT(OperatorTable_setOperator)(OperatorTable * table, const char * nam
 void IMPLEMENT(OperatorTable_removeRecord)(OperatorTable * table, int recordIndex) {
     /*provided_OperatorTable_removeRecord(table, recordIndex);*/
     int i;
+    free(table->records[recordIndex][0]);
+    free(table->records[recordIndex][1]);
     for(i=recordIndex;i<table->recordCount-1;i++){
         table->records[i][0] = duplicateString(table->records[i+1][0]);
         table->records[i][1] = duplicateString(table->records[i+1][1]);
         free(table->records[i+1][0]);
         free(table->records[i+1][1]);
-
     }
+    free(table->records[i]);
     table->recordCount--;
 }
 

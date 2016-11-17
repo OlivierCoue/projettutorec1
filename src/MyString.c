@@ -194,24 +194,16 @@ int IMPLEMENT(icaseEndWith)(const char * end, const char * str) {
  * @return the new string
  */
 char * IMPLEMENT(concatenateString)(const char * str1, const char * str2) {
-    int i;
-    char *result;
-    int size1 = (int)stringLength(str1);
-    int size2 = (int)stringLength(str2);
-    result = (char *)malloc(((long unsigned int)size1+(long unsigned int)size2+1)*sizeof(char));
-    if(result == NULL)
-        exit(-1);
+    char *res;
+    size_t size1 = stringLength(str1);
+    size_t size2 = stringLength(str2);
+    res = (char *)malloc((size1+size2+1)*sizeof(char));
+    if(res == NULL)
+        fatalError("Allocation error");
 
-    for(i=0; i<size1; i++){
-        result[i] = str1[i];
-    }
-
-    for(i=0; i<size2+1; i++){
-        result[size1+i] = str2[i];
-    }
-
-    result[size1+i] = '\0';
-    return result;
+    copyStringWithLength(res,str1,size1+1);
+    copyStringWithLength(res+size1,str2,size2+1);
+    return res;
 }
 
 /** Like the index() function. It returns a pointer to the first occurrence of the character c in the string str.
