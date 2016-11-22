@@ -253,11 +253,16 @@ void IMPLEMENT(CatalogRecord_read)(CatalogRecord * record, FILE * file)
 
   if(fread(codeTab, sizeof(char)*CATALOGRECORD_CODE_SIZE, 1, file)!=1)
     fatalError("Writing Error");
-  fread(designationTab, sizeof(char)*CATALOGRECORD_DESIGNATION_SIZE, 1, file);
-  fread(unityTab, sizeof(char)*CATALOGRECORD_UNITY_SIZE, 1, file);
-  fread(&record->basePrice, sizeof(double), 1, file);
-  fread(&record->sellingPrice, sizeof(double), 1, file);
-  fread(&record->rateOfVAT, sizeof(double), 1, file);
+  if(fread(designationTab, sizeof(char)*CATALOGRECORD_DESIGNATION_SIZE, 1, file)!=1)
+    fatalError("Writing Error");
+  if(fread(unityTab, sizeof(char)*CATALOGRECORD_UNITY_SIZE, 1, file)!=1)
+    fatalError("Writing Error");
+  if(fread(&record->basePrice, sizeof(double), 1, file)!=1)
+    fatalError("Writing Error");
+  if(fread(&record->sellingPrice, sizeof(double), 1, file)!=1)
+    fatalError("Writing Error");
+  if(fread(&record->rateOfVAT, sizeof(double), 1, file)!=1)
+    fatalError("Writing Error");
 
   CatalogRecord_setValue_code(record, codeTab);
   CatalogRecord_setValue_designation(record, designationTab);
@@ -270,8 +275,8 @@ void IMPLEMENT(CatalogRecord_read)(CatalogRecord * record, FILE * file)
  */
 void IMPLEMENT(CatalogRecord_write)(CatalogRecord * record, FILE * file)
 {
-  provided_CatalogRecord_write(record, file);
-  /*char codeTab[CATALOGRECORD_CODE_SIZE] = {0};
+  /*provided_CatalogRecord_write(record, file);*/
+  char codeTab[CATALOGRECORD_CODE_SIZE] = {0};
   char designationTab[CATALOGRECORD_DESIGNATION_SIZE] = {0};
   char unityTab[CATALOGRECORD_UNITY_SIZE] = {0};
 
@@ -291,17 +296,17 @@ void IMPLEMENT(CatalogRecord_write)(CatalogRecord * record, FILE * file)
     fclose(file);
     exit(-1);
   }
-  if(fwrite(CatalogRecord_getValue_basePrice(record), sizeof(char)*CATALOGRECORD_BASEPRICE_SIZE, 1, file)!=1){
+  if(fwrite(&record->basePrice, sizeof(double), 1, file)!=1){
     fclose(file);
     exit(-1);
   }
-  if(fwrite(CatalogRecord_getValue_sellingPrice(record), sizeof(char)*CATALOGRECORD_SELLINGPRICE_SIZE, 1, file)!=1){
+  if(fwrite(&record->sellingPrice, sizeof(double), 1, file)!=1){
     fclose(file);
     exit(-1);
   }
-  if(fwrite(CatalogRecord_getValue_rateOfVAT(record), sizeof(char)*CATALOGRECORD_RATEOFVAT_SIZE, 1, file)!=1){
+  if(fwrite(&record->rateOfVAT, sizeof(double), 1, file)!=1){
     fclose(file);
     exit(-1);
-  }*/
+  }
 }
 
