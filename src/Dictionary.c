@@ -25,7 +25,14 @@
  */
 Dictionary * IMPLEMENT(Dictionary_create)(void)
 {
-  return provided_Dictionary_create();
+  /*return provided_Dictionary_create();*/
+  Dictionary *dico;
+  dico = (Dictionary*)malloc(sizeof(Dictionary));
+  if(dico==NULL)
+      fatalError("Allocation Error");
+  dico->count = 0;
+  dico->entries = NULL;
+  return dico;
 }
 
 /** Destroy a dictionary
@@ -33,7 +40,15 @@ Dictionary * IMPLEMENT(Dictionary_create)(void)
  */
 void IMPLEMENT(Dictionary_destroy)(Dictionary * dictionary)
 {
-  provided_Dictionary_destroy(dictionary);
+  /*provided_Dictionary_destroy(dictionary);*/
+  int i;
+  for(i=0; i<dictionary->count; i++){
+    free(dictionary->entries[i].name);
+    if(dictionary->entries[i].type == STRING_ENTRY)
+      free(dictionary->entries[i].value.stringValue);
+  }
+  free(dictionary->entries);
+  free(dictionary);
 }
 
 /** Get a pointer on the entry associated with the given entry name
@@ -43,7 +58,13 @@ void IMPLEMENT(Dictionary_destroy)(Dictionary * dictionary)
  */
 DictionaryEntry * IMPLEMENT(Dictionary_getEntry)(Dictionary * dictionary, const char * name)
 {
-  return provided_Dictionary_getEntry(dictionary, name);
+  /*return provided_Dictionary_getEntry(dictionary, name);*/
+  int i;
+  for(i=0; i<dictionary->count; i++){
+    if(icaseCompareString(dictionary->entries[i].name, name)==0)
+      return &dictionary->entries[i];
+  }
+  return NULL;
 }
 
 /** Define or change a dictionary entry as a string
@@ -53,7 +74,25 @@ DictionaryEntry * IMPLEMENT(Dictionary_getEntry)(Dictionary * dictionary, const 
  */
 void IMPLEMENT(Dictionary_setStringEntry)(Dictionary * dictionary, const char * name, const char * value)
 {
-  provided_Dictionary_setStringEntry(dictionary, name, value);
+  /*provided_Dictionary_setStringEntry(dictionary, name, value);*/
+  DictionaryEntry *entry = Dictionary_getEntry(dictionary, name);
+  if(entry == NULL){
+    DictionaryEntry newEntry;
+    newEntry.name = duplicateString(name);
+    newEntry.type = STRING_ENTRY;
+    newEntry.value.stringValue = duplicateString(value);
+    dictionary->count++;
+    dictionary->entries = (DictionaryEntry*)realloc(dictionary->entries, (size_t)dictionary->count*sizeof(DictionaryEntry));
+    if(dictionary->entries == NULL)
+      exit(-1);
+    dictionary->entries[dictionary->count-1] = newEntry;
+  }else{
+    if(entry->type == STRING_ENTRY)
+      free(entry->value.stringValue);
+
+    entry->type = STRING_ENTRY;
+    entry->value.stringValue = duplicateString(value);
+  }
 }
 
 /** Define or change a dictionary entry as a number
@@ -63,7 +102,25 @@ void IMPLEMENT(Dictionary_setStringEntry)(Dictionary * dictionary, const char * 
  */
 void IMPLEMENT(Dictionary_setNumberEntry)(Dictionary * dictionary, const char * name, double value)
 {
-  provided_Dictionary_setNumberEntry(dictionary, name, value);
+  /*provided_Dictionary_setNumberEntry(dictionary, name, value);*/
+  DictionaryEntry *entry = Dictionary_getEntry(dictionary, name);
+  if(entry == NULL){
+    DictionaryEntry newEntry;
+    newEntry.name = duplicateString(name);
+    newEntry.type = NUMBER_ENTRY;
+    newEntry.value.numberValue = value;
+    dictionary->count++;
+    dictionary->entries = (DictionaryEntry*)realloc(dictionary->entries, (size_t)dictionary->count*sizeof(DictionaryEntry));
+    if(dictionary->entries == NULL)
+      exit(-1);
+    dictionary->entries[dictionary->count-1] = newEntry;
+  }else{
+    if(entry->type == STRING_ENTRY)
+      free(entry->value.stringValue);
+
+    entry->type = NUMBER_ENTRY;
+    entry->value.numberValue = value;
+  }
 }
 
 /** Create a new string on the heap which is the result of the formatting of format according to the dictionary content

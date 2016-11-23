@@ -53,7 +53,8 @@ CustomerDB * IMPLEMENT(CustomerDB_open)(const char * filename) {
         return NULL;
     }
 
-    fread(&openedCustomerDB->recordCount, sizeof(int), 1, openedCustomerDB->file);
+    if(fread(&openedCustomerDB->recordCount, sizeof(int), 1, openedCustomerDB->file)!=1)
+        fatalError("Read Error");
     return openedCustomerDB;
 }
 
@@ -70,7 +71,8 @@ CustomerDB * IMPLEMENT(CustomerDB_openOrCreate)(const char * filename) {
 void IMPLEMENT(CustomerDB_close)(CustomerDB * customerDB) {
     /*provided_CustomerDB_close(customerDB);*/
     fseek(customerDB->file, 0, SEEK_SET );
-    fwrite(&customerDB->recordCount, sizeof(int), 1,customerDB->file);
+    if(fwrite(&customerDB->recordCount, sizeof(int), 1,customerDB->file)!=1)
+        fatalError("Write Error");
     fclose(customerDB->file);
     free(customerDB);
 }
