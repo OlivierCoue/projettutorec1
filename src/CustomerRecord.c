@@ -85,9 +85,9 @@ void IMPLEMENT(CustomerRecord_init)(CustomerRecord * record)
   }
 }
 
-void IMPLEMENT(CustomerRecord_finalize)(CustomerRecord * record)
+void IMPLEMENT(CustomerRecord_finalize)(CustomerRecord * UNUSED(record))
 {
-  provided_CustomerRecord_finalize(record);
+  /*provided_CustomerRecord_finalize(record);*/
 }
 
 void IMPLEMENT(CustomerRecord_read)(CustomerRecord * record, FILE * file)
