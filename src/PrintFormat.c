@@ -46,3 +46,19 @@ void IMPLEMENT(PrintFormat_loadFromFile)(PrintFormat * format, const char * file
   provided_PrintFormat_loadFromFile(format, filename);
 }
 
+char *readLine(FILE*file){
+    char*newLine=(char*)malloc(100);
+    if(newLine==NULL)
+        fatalError("Allocation Error");
+    newLine[0]='\0';
+    if(fgets(newLine,100,file)==NULL)
+        fatalError("Fgets error");
+    while(newLine[stringLength(newLine)-1]!='\n'){
+        newLine=(char*)realloc(newLine, stringLength(newLine)+100);
+        if(newLine==NULL)
+            fatalError("Allocation Error");
+        if(fgets(newLine+stringLength(newLine),100,file)==NULL)
+            return newLine;
+    }
+    return newLine;
+}
