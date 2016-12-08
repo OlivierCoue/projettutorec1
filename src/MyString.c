@@ -212,7 +212,13 @@ char * IMPLEMENT(concatenateString)(const char * str1, const char * str2) {
  * @return a pointer to the first occurrence of the character c in the string str if c is in str, NULL otherwise
  */
 const char * IMPLEMENT(indexOfChar)(const char *str, char c) {
-    return provided_indexOfChar(str, c);
+    /*return provided_indexOfChar(str, c);*/
+    int i;
+    for(i=0; str[i]!='\0'; i++){
+        if(str[i]==c)
+            return &str[i];
+    }
+    return NULL;
 }
 
 /** Create a copy on the heap of part of a string. The new string contains the characters pointed from start (inclusive) to end (exclusive).
@@ -235,7 +241,18 @@ const char * IMPLEMENT(indexOfChar)(const char *str, char c) {
  * @endcode
  */
 char * IMPLEMENT(subString)(const char * start, const char * end) {
-    return provided_subString(start, end);
+    /*return provided_subString(start, end);*/
+    char buffer[100];
+    int i=0;
+    if(start>end)
+        return NULL;
+    while(start<end){
+        buffer[i]=*start;
+        start++;
+        i++;
+    }
+    buffer[i]='\0';
+    return duplicateString(buffer);
 }
 
 /** Like the strstr() function. It returns a pointer to the first occurrence of the string aiguille in the string meule_de_foin.
@@ -292,5 +309,22 @@ void IMPLEMENT(makeLowerCaseString)(char * str) {
  */
 char * IMPLEMENT(insertString)(const char * src, int insertPosition, const char * toBeInserted,
         int insertLength) {
-    return provided_insertString(src, insertPosition, toBeInserted, insertLength);
+    /*return provided_insertString(src, insertPosition, toBeInserted, insertLength);*/
+    int i;
+    char * dest;
+    size_t strSize = (size_t)insertLength + stringLength(src);
+    dest = (char *)malloc(strSize+1);
+    if(dest==NULL)
+        fatalError("Allocation Error");
+    for(i=0; (unsigned)i<strSize;i++)
+    {
+        if(i<insertPosition)
+            dest[i] = src[i];
+        else if(i>=insertLength+insertPosition)
+            dest[i] = src[i-insertLength];
+        else
+            dest[i] = toBeInserted[i-insertPosition];
+    }
+    dest[strSize] = '\0';
+    return dest;
 }

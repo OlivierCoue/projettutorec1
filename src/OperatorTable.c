@@ -131,7 +131,10 @@ const char * IMPLEMENT(OperatorTable_getName)(OperatorTable * table, int recordI
  * @relates OperatorTable
  */
 const char * IMPLEMENT(OperatorTable_getPassword)(OperatorTable * table, int recordIndex) {
-    return provided_OperatorTable_getPassword(table, recordIndex);
+    /*return provided_OperatorTable_getPassword(table, recordIndex);*/
+    if(recordIndex>=table->recordCount)
+        fatalError("Record index out of array");
+    return table->records[recordIndex][1];
 }
 
 /** Get the record index associated with an operator name.

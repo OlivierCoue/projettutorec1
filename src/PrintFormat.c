@@ -20,13 +20,19 @@
 #include <PrintFormat.h>
 #include <Dictionary.h>
 
+char *readLine(FILE*file);
+
 /** Initialize a print format
  * @param format a print format
  * @warning initialized print format should be finalized with PrintFormat_finalize()
  */
 void IMPLEMENT(PrintFormat_init)(PrintFormat * format)
 {
-  provided_PrintFormat_init(format);
+  /*provided_PrintFormat_init(format);*/
+  format->name = duplicateString("");
+  format->header = duplicateString("");
+  format->row = duplicateString("");
+  format->footer = duplicateString("");
 }
 
 /** Finalize a print format
@@ -34,7 +40,11 @@ void IMPLEMENT(PrintFormat_init)(PrintFormat * format)
  */
 void IMPLEMENT(PrintFormat_finalize)(PrintFormat * format)
 {
-  provided_PrintFormat_finalize(format);
+  /*provided_PrintFormat_finalize(format);*/
+  free(format->name);
+  free(format->header);
+  free(format->row);
+  free(format->footer);
 }
 
 /** Load a print format from a file
@@ -47,17 +57,18 @@ void IMPLEMENT(PrintFormat_loadFromFile)(PrintFormat * format, const char * file
 }
 
 char *readLine(FILE*file){
-    char*newLine=(char*)malloc(100);
-    if(newLine==NULL)
-        fatalError("Allocation Error");
-    newLine[0]='\0';
-    if(fgets(newLine,100,file)==NULL)
-        fatalError("Fgets error");
-    while(newLine[stringLength(newLine)-1]!='\n'){
-        newLine=(char*)realloc(newLine, stringLength(newLine)+100);
-        if(newLine==NULL)
-            fatalError("Allocation Error");
-        if(fgets(newLine+stringLength(newLine),100,file)==NULL)
+    char * newLine;
+    char buffer[100];
+    char * tmpLineToFree;
+    newLine =  duplicateString("");
+
+    while (fgets(buffer, sizeof(buffer), file) != NULL)
+    {
+        tmpLineToFree = newLine;
+        newLine = concatenateString(newLine, buffer);
+        free(tmpLineToFree);
+
+        if (buffer[stringLength(buffer) - 1] == '\n')
             return newLine;
     }
     return newLine;
