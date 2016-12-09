@@ -1,0 +1,49 @@
+make[1]: Entering directory '/home/olivier/Documents/c/projettutorec1'
+G_SLICE=always-malloc G_DEBUG=gc-friendly valgrind --tool=memcheck --leak-check=full --track-origins=yes --suppressions=make/valgrind-suppressions.txt  --gen-suppressions=no release/facturation disable-gui  2>&1
+==6328== Memcheck, a memory error detector
+==6328== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==6328== Using Valgrind-3.12.0.SVN and LibVEX; rerun with -h for copyright info
+==6328== Command: release/facturation disable-gui
+==6328== 
+Running preliminary unit test... (specify verbose-unittests for details)
+  Testing MyString (disable with disable-unit-MyString)................
+  Testing EncryptDecrypt (disable with disable-unit-EncryptDecrypt).
+  Testing OperatorTable (disable with disable-unit-OperatorTable)......
+  Testing CatalogRecord (disable with disable-unit-CatalogRecord)...
+  Testing CatalogDB (disable with disable-unit-CatalogDB)....
+  Testing CustomerRecord (disable with disable-unit-CustomerRecord)...
+  Testing CustomerDB (disable with disable-unit-CustomerDB)....
+  Testing DocumentUtil (disable with disable-unit-DocumentUtil)...
+  Testing DocumentRowList (disable with disable-unit-DocumentRowList).....
+  Testing Document (disable with disable-unit-Document).
+  Testing PrintFormat (disable with disable-unit-PrintFormat).
+  Testing Dictionary (disable with disable-unit-Dictionary)..
+Great ! Unit tests passed !
+
+Registry dump started (reduce verbosity with reduce-dump-usage or hide with disable-dump-usage)
+    Function provided_Dictionary_format has been used 12 times
+    Function provided_PrintFormat_loadFromFile has been used 1 times
+Registry dump done
+
+Registry dump by file name (hide with disable-dump-usage)
+    File PrintFormat.c : 1 functions remaining
+    File Dictionary.c : 1 functions remaining
+Registry dump by file name done
+
+==6328== 
+==6328== HEAP SUMMARY:
+==6328==     in use at exit: 49,212 bytes in 238 blocks
+==6328==   total heap usage: 25,678 allocs, 25,440 frees, 788,120 bytes allocated
+==6328== 
+==6328== LEAK SUMMARY:
+==6328==    definitely lost: 0 bytes in 0 blocks
+==6328==    indirectly lost: 0 bytes in 0 blocks
+==6328==      possibly lost: 0 bytes in 0 blocks
+==6328==    still reachable: 0 bytes in 0 blocks
+==6328==                       of which reachable via heuristic:
+==6328==                         newarray           : 1,536 bytes in 16 blocks
+==6328==         suppressed: 49,212 bytes in 238 blocks
+==6328== 
+==6328== For counts of detected and suppressed errors, rerun with: -v
+==6328== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 18 from 18)
+make[1]: Leaving directory '/home/olivier/Documents/c/projettutorec1'
